@@ -3,7 +3,7 @@ import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
-
+import React, { useEffect } from "react";
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet();
@@ -17,6 +17,8 @@ const Home: NextPage = () => {
   const [tempTextHere, settempTextHere] = useState('')
 
   const [erroeMsg, setErrorMsg] = useState('');
+
+
 
   const refreshPage = () => {
     window.location.reload();
@@ -103,11 +105,22 @@ const Home: NextPage = () => {
 
     // {"code":2,"info":"user declined tx"}.
     //Insufficient input in transaction
+
+
+
+
+
   }
 
 
+
+
   return (
+
     <>
+      <title>Hippy Horse Mint</title>
+      <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
+
       {statusTxt ? <>
 
         <div className="firework" ></div>
