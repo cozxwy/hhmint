@@ -73,9 +73,10 @@ const Home: NextPage = () => {
       const txHash = await wallet.submitTx(signedTx);
     }
     catch (err) {
-      if (err.message.search("Insufficient input in transaction") >= 0) console.log("Insufficient input in transaction")
-      else if ((err.message.search("user declined tx") >= 0)) console.log("User declined tx")
-      else console.log(err)
+      //if (err.message.search("Insufficient input in transaction") >= 0) console.log("Insufficient input in transaction")
+      //else if ((err.message.search("user declined tx") >= 0)) console.log("User declined tx")
+      //else
+       console.log(err)
 
     }
 
