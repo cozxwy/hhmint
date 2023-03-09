@@ -2,13 +2,7 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
-import tw from 'twin.macro';
 import { Transaction } from '@meshsdk/core';
-import * as React from 'react';
-/*const Blockfrost = require("@blockfrost/blockfrost-js");
-const API = new Blockfrost.BlockFrostAPI({
-  projectId: "mainnetkey", // see: https://blockfrost.io
-});*/
 
 
 const Home: NextPage = () => {
@@ -16,6 +10,17 @@ const Home: NextPage = () => {
   const [assets, setAssets] = useState<null | any>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [count, setCount] = useState(1)
+  const [statusMsg, setstatusMsg] = useState(true)
+
+  const [statusTxt, setstatusTxt] = useState(false)
+  const [linkCardanoScan, setLinkCardanoScan] = useState('')
+  const [tempTextHere, settempTextHere] = useState('')
+
+  const [erroeMsg, setErrorMsg] = useState('');
+
+  const refreshPage = () => {
+    window.location.reload();
+  }
 
   async function getAssets() {
     if (wallet) {
@@ -25,8 +30,17 @@ const Home: NextPage = () => {
       setLoading(false);
     }
   }
-/*
-  async function getMinted(){
+
+  /*async function getMinted() {
+
+    const Blockfrost = require("@blockfrost/blockfrost-js");
+    const API = new Blockfrost.BlockFrostAPI({
+      projectId: "mainnetGmEw10BUaixrvC82Y53RWl9tJMI5e5Wo", // see: https://blockfrost.io
+    });
+
+
+
+
     const policyId = "583c9e403f5974a6a3a186972dabaacf2a759fa0913ed9f12b34164d"
     try {
       const collections = await API.getAssets(policyId);
@@ -37,13 +51,7 @@ const Home: NextPage = () => {
     }
 
   }
-
-  useEffect(()=>{
-
-    getMinted()
-    
-    }, [])
-*/
+  */
 
   function plus() {
 
@@ -61,7 +69,7 @@ const Home: NextPage = () => {
     const amountLovelance = (count * 10000000).toString();
     const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
-        'addr1qyl4v9ep3s572lkqv47dlr96frk8epxjmzvh3hkgaurmy0q0radg4vhthkl6udq3rt3cyj82s32xrxcydtfd7gfgl5dsu7hda5',
+        'addr_test1qrcs3ffcsrwxpwanatj56rx37a2nr3gflgz5nqvzwwpkznkrgjs4652esd9m0c4gugafjeeaja8kdzn9zev663q8hvfqf3ht56',
         amountLovelance
       )
       ;
@@ -71,13 +79,25 @@ const Home: NextPage = () => {
       const unsignedTx = await tx.build();
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
-    }
-    catch (err) {
-      //if (err.message.search("Insufficient input in transaction") >= 0) console.log("Insufficient input in transaction")
-      //else if ((err.message.search("user declined tx") >= 0)) console.log("User declined tx")
-      //else
-       console.log(err)
+      settempTextHere('Here')
+      setstatusMsg(true);
+      setLinkCardanoScan('https://preview.cardanoscan.io/transaction/' + txHash)
+      setErrorMsg('Mint complete transaction ' + linkCardanoScan)
+      setstatusTxt(true)
 
+
+
+    }
+    catch (e) {
+      let errorMessage = "Failed to do something exceptional";
+      setstatusMsg(false);
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      }
+      if (errorMessage.search("Insufficient input in transaction") >= 0) setErrorMsg('Insufficient balance')
+      else if ((errorMessage.search("user declined to sign tx") >= 0)) setErrorMsg('User declined tx')
+      //console.log(errorMessage)
+      setstatusTxt(false)
     }
 
 
@@ -88,21 +108,32 @@ const Home: NextPage = () => {
 
   return (
     <>
+      {statusTxt ? <>
 
-    <img src="https://i.imgur.com/lPzCKwm.png" alt="hh" className="firstHH" />
-    <img src="https://i.imgur.com/Pi5fO5y.png" alt="hh2" className="firstHH2" />
+        <div className="firework" ></div>
+        <div className="firework" ></div>
+        <div className="firework" ></div>
+
+      </> : ""}
+
+
+      <img src="https://i.imgur.com/lPzCKwm.png" alt="hh" className="firstHH" />
+      <img src="https://i.imgur.com/Pi5fO5y.png" alt="hh2" className="firstHH2" />
       <div className="leftItem" ><CardanoWallet /></div>
       <div className="centered">
-        <h1>Hippy Horse Minting Page</h1>
+
+        <h1> <span className="rainbow rainbow_text_animated">Hippy Horse</span> Minting Page</h1>
         <br></br>  <br></br>
         {connected && (
           <>
 
+
             <div className="mintForm">
-            <br></br>
-            <div className="blink_me"> <span>LIVE&nbsp;</span> minted 2 / 4000 </div> 
+
               <br></br>
-            
+              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span> remain 4299 / 4444 </div>
+              <br></br>
+
             </div>
             <br></br>
             <div className="mintForm">
@@ -111,13 +142,31 @@ const Home: NextPage = () => {
               <button onClick={plus}> + </button>  &nbsp;&nbsp;
               <button onClick={minus}> - </button>
               <br></br> <br></br>
-              <button onClick={mint}>Mint Now</button>
-              <br></br>  <br></br>
+
+
+
+              {statusTxt ? <>
+
+
+                &nbsp;<button onClick={refreshPage} className="button glow-on-hover"><span>Mint Again </span></button>
+
+              </> : <button onClick={mint} className="button glow-on-hover"><span>Mint Now </span></button>}
+
+
+
+              <br></br>
+              &nbsp;&nbsp;
+              <div>
+
+                {statusMsg ? <b className="completedMsg">{erroeMsg} <a href={linkCardanoScan}>{tempTextHere}</a> </b> : <b className="errorMsg">{erroeMsg}</b>}
+              </div>
+              <br></br>
               &nbsp;&nbsp;
             </div>
 
           </>
         )}
+
       </div>
     </>
   );
