@@ -158,7 +158,7 @@ const Home: NextPage = () => {
               &nbsp;&nbsp;
               <div>
 
-                {statusMsg ? <b className="completedMsg">{erroeMsg} <a href={linkCardanoScan}>{tempTextHere}</a> </b> : <b className="errorMsg">{erroeMsg}</b>}
+                {statusMsg ? <b className="completedMsg">{erroeMsg} <a target="_blank" href={linkCardanoScan}>{tempTextHere}  </a> </b> : <b className="errorMsg">{erroeMsg}</b>}
               </div>
               <br></br>
               &nbsp;&nbsp;

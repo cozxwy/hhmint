@@ -414,7 +414,7 @@ button:focus-visible {
   animation: firework 2s forwards 1;
   animation-duration: 5s;
   position: absolute;
-  top: 50%;
+  top: 20%;
   left: 50%;
   transform: translate(-50%, var(--y));
   width: var(--initialSize);
