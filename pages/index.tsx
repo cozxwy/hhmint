@@ -1,22 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
 import { Transaction } from '@meshsdk/core';
-import React, { useEffect } from "react";
+import axios from 'axios';
+
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet();
-  const [assets, setAssets] = useState<null | any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [count, setCount] = useState(1)
   const [statusMsg, setstatusMsg] = useState(true)
-
   const [statusTxt, setstatusTxt] = useState(false)
   const [linkCardanoScan, setLinkCardanoScan] = useState('')
   const [tempTextHere, settempTextHere] = useState('')
-
   const [erroeMsg, setErrorMsg] = useState('');
+  const [remainNft, setremainNft] = useState('0');
+
 
 
 
@@ -24,36 +23,19 @@ const Home: NextPage = () => {
     window.location.reload();
   }
 
-  async function getAssets() {
-    if (wallet) {
-      setLoading(true);
-      const _assets = await wallet.getAssets();
-      setAssets(_assets);
-      setLoading(false);
-    }
-  }
 
-  /*async function getMinted() {
+  useEffect(() => {
+    /*axios.get('https://admirable-basbousa-f20380.netlify.app').then(response => {
+      console.log(response.data['count'])
+      setremainNft(response.data['count']);
+    })*/
 
-    const Blockfrost = require("@blockfrost/blockfrost-js");
-    const API = new Blockfrost.BlockFrostAPI({
-      projectId: "mainnetGmEw10BUaixrvC82Y53RWl9tJMI5e5Wo", // see: https://blockfrost.io
-    });
+    console.log('i fire once');
+  }, []);
 
 
 
 
-    const policyId = "583c9e403f5974a6a3a186972dabaacf2a759fa0913ed9f12b34164d"
-    try {
-      const collections = await API.getAssets(policyId);
-      console.log(collections)
-    }
-    catch (err) {
-      console.log("error", err);
-    }
-
-  }
-  */
 
   function plus() {
 
@@ -71,7 +53,7 @@ const Home: NextPage = () => {
     const amountLovelance = (count * 10000000).toString();
     const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
-        'addr_test1qrcs3ffcsrwxpwanatj56rx37a2nr3gflgz5nqvzwwpkznkrgjs4652esd9m0c4gugafjeeaja8kdzn9zev663q8hvfqf3ht56',
+        'addr1v9tp0ae6t97hcprxfw7s6hqyuqv7mv6vly8km7q20n8ntjqzrz9er',
         amountLovelance
       )
       ;
@@ -105,6 +87,7 @@ const Home: NextPage = () => {
 
     // {"code":2,"info":"user declined tx"}.
     //Insufficient input in transaction
+
 
 
 
@@ -144,7 +127,7 @@ const Home: NextPage = () => {
             <div className="mintForm">
 
               <br></br>
-              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span> remain 4299 / 4444 </div>
+              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span> remain {4444 - parseInt(remainNft)} / 4444 </div>
               <br></br>
 
             </div>
