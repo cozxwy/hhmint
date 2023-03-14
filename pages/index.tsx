@@ -52,9 +52,24 @@ const Home: NextPage = () => {
 
   async function mint() {
     const amountLovelance = (count * 10000000).toString();
+
+    let source_addr = ''
+    let cardano_scan = ''
+    let networkType = 'mainnet'
+    //let networkType = 'preview'
+
+
+    if (networkType == 'preview') {
+      source_addr = 'addr_test1qq9llcqvz2ga54s3jaxlaxelcx3g8gj3getxtqct9ewg3v7rgjs4652esd9m0c4gugafjeeaja8kdzn9zev663q8hvfq9mx4hv'
+      cardano_scan = 'https://preview.cardanoscan.io/transaction/'
+    }
+    else {
+      source_addr = 'addr1v9tp0ae6t97hcprxfw7s6hqyuqv7mv6vly8km7q20n8ntjqzrz9er'
+      cardano_scan = 'https://cardanoscan.io/transaction/'
+    }
     const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
-        'addr1v9tp0ae6t97hcprxfw7s6hqyuqv7mv6vly8km7q20n8ntjqzrz9er',
+        source_addr,
         amountLovelance
       )
       ;
@@ -66,7 +81,7 @@ const Home: NextPage = () => {
       const txHash = await wallet.submitTx(signedTx);
       settempTextHere('Here')
       setstatusMsg(true);
-      setLinkCardanoScan('https://preview.cardanoscan.io/transaction/' + txHash)
+      setLinkCardanoScan(cardano_scan + txHash)
       setErrorMsg('Mint complete transaction ' + linkCardanoScan)
       setstatusTxt(true)
 
@@ -81,17 +96,14 @@ const Home: NextPage = () => {
       }
       if (errorMessage.search("Insufficient input in transaction") >= 0) setErrorMsg('Insufficient balance')
       else if ((errorMessage.search("user declined to sign tx") >= 0)) setErrorMsg('User declined tx')
-      //console.log(errorMessage)
+
       setstatusTxt(false)
     }
 
 
-    // {"code":2,"info":"user declined tx"}.
-    //Insufficient input in transaction
-
 
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      // dark mode
+
       setdarkMode(true)
     }
 
