@@ -15,6 +15,7 @@ const Home: NextPage = () => {
   const [tempTextHere, settempTextHere] = useState('')
   const [erroeMsg, setErrorMsg] = useState('');
   const [remainNft, setremainNft] = useState('0');
+  const [darkMode, setdarkMode] = useState(false);
 
 
 
@@ -89,8 +90,34 @@ const Home: NextPage = () => {
     //Insufficient input in transaction
 
 
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      setdarkMode(true)
+    }
+
+    else {
+      setdarkMode(false)
+    }
 
 
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      const newColorScheme = event.matches ? setdarkMode(true) : setdarkMode(false);
+    });
+
+
+    // Check to see if Media-Queries are supported
+    if (window.matchMedia) {
+      // Check if the dark-mode Media-Query matches
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // Dark
+        setdarkMode(true)
+      } else {
+        // Light
+        setdarkMode(false)
+      }
+    } else {
+      // Default (when Media-Queries are not supported)
+    }
 
 
   }
@@ -113,8 +140,21 @@ const Home: NextPage = () => {
       </> : ""}
 
 
-      <img src="https://i.imgur.com/lPzCKwm.png" alt="hh" className="firstHH" />
-      <img src="https://i.imgur.com/Pi5fO5y.png" alt="hh2" className="firstHH2" />
+      {darkMode ? <>
+
+
+        <img src="https://i.imgur.com/BKdIJ1W.png" alt="hhdark" className="firstHH" />
+        <img src="https://i.imgur.com/YbOz95Q.png" alt="hh2dark" className="firstHH2" />
+
+      </> : <>
+
+
+        <img src="https://i.imgur.com/BKdIJ1W.png" alt="hh" className="firstHH" />
+        <img src="https://i.imgur.com/YbOz95Q.png" alt="hh2" className="firstHH2" />
+
+      </>}
+
+
       <div className="leftItem" ><CardanoWallet /></div>
       <div className="centered">
 
