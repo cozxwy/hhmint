@@ -1,49 +1,42 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { NextPage } from "next";
 import { useWallet } from '@meshsdk/react';
 import { CardanoWallet } from '@meshsdk/react';
-import tw from 'twin.macro';
 import { Transaction } from '@meshsdk/core';
-import * as React from 'react';
-/*const Blockfrost = require("@blockfrost/blockfrost-js");
-const API = new Blockfrost.BlockFrostAPI({
-  projectId: "mainnetkey", // see: https://blockfrost.io
-});*/
+import axios from 'axios';
 
 
 const Home: NextPage = () => {
   const { connected, wallet } = useWallet();
-  const [assets, setAssets] = useState<null | any>(null);
-  const [loading, setLoading] = useState<boolean>(false);
   const [count, setCount] = useState(1)
+  const [statusMsg, setstatusMsg] = useState(true)
+  const [statusTxt, setstatusTxt] = useState(false)
+  const [linkCardanoScan, setLinkCardanoScan] = useState('')
+  const [tempTextHere, settempTextHere] = useState('')
+  const [erroeMsg, setErrorMsg] = useState('');
+  const [remainNft, setremainNft] = useState('0');
+  const [darkMode, setdarkMode] = useState(false);
 
-  async function getAssets() {
-    if (wallet) {
-      setLoading(true);
-      const _assets = await wallet.getAssets();
-      setAssets(_assets);
-      setLoading(false);
-    }
-  }
-/*
-  async function getMinted(){
-    const policyId = "583c9e403f5974a6a3a186972dabaacf2a759fa0913ed9f12b34164d"
-    try {
-      const collections = await API.getAssets(policyId);
-      console.log(collections)
-    }
-    catch (err) {
-      console.log("error", err);
-    }
 
+
+
+  const refreshPage = () => {
+    window.location.reload();
   }
 
-  useEffect(()=>{
 
-    getMinted()
-    
-    }, [])
-*/
+  useEffect(() => {
+    /*axios.get('https://admirable-basbousa-f20380.netlify.app').then(response => {
+      console.log(response.data['count'])
+      setremainNft(response.data['count']);
+    })*/
+
+    console.log('i fire once');
+  }, []);
+
+
+
+
 
   function plus() {
 
@@ -61,7 +54,7 @@ const Home: NextPage = () => {
     const amountLovelance = (count * 10000000).toString();
     const tx = new Transaction({ initiator: wallet })
       .sendLovelace(
-        'addr1qyl4v9ep3s572lkqv47dlr96frk8epxjmzvh3hkgaurmy0q0radg4vhthkl6udq3rt3cyj82s32xrxcydtfd7gfgl5dsu7hda5',
+        'addr1v9tp0ae6t97hcprxfw7s6hqyuqv7mv6vly8km7q20n8ntjqzrz9er',
         amountLovelance
       )
       ;
@@ -71,38 +64,112 @@ const Home: NextPage = () => {
       const unsignedTx = await tx.build();
       const signedTx = await wallet.signTx(unsignedTx);
       const txHash = await wallet.submitTx(signedTx);
-    }
-    catch (err) {
-      //if (err.message.search("Insufficient input in transaction") >= 0) console.log("Insufficient input in transaction")
-      //else if ((err.message.search("user declined tx") >= 0)) console.log("User declined tx")
-      //else
-       console.log(err)
+      settempTextHere('Here')
+      setstatusMsg(true);
+      setLinkCardanoScan('https://preview.cardanoscan.io/transaction/' + txHash)
+      setErrorMsg('Mint complete transaction ' + linkCardanoScan)
+      setstatusTxt(true)
 
+
+
+    }
+    catch (e) {
+      let errorMessage = "Failed to do something exceptional";
+      setstatusMsg(false);
+      if (e instanceof Error) {
+        errorMessage = e.message;
+      }
+      if (errorMessage.search("Insufficient input in transaction") >= 0) setErrorMsg('Insufficient balance')
+      else if ((errorMessage.search("user declined to sign tx") >= 0)) setErrorMsg('User declined tx')
+      //console.log(errorMessage)
+      setstatusTxt(false)
     }
 
 
     // {"code":2,"info":"user declined tx"}.
     //Insufficient input in transaction
+
+
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      // dark mode
+      setdarkMode(true)
+    }
+
+    else {
+      setdarkMode(false)
+    }
+
+
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+      const newColorScheme = event.matches ? setdarkMode(true) : setdarkMode(false);
+    });
+
+
+    // Check to see if Media-Queries are supported
+    if (window.matchMedia) {
+      // Check if the dark-mode Media-Query matches
+      if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // Dark
+        setdarkMode(true)
+      } else {
+        // Light
+        setdarkMode(false)
+      }
+    } else {
+      // Default (when Media-Queries are not supported)
+    }
+
+
   }
 
 
-  return (
-    <>
 
-    <img src="https://i.imgur.com/lPzCKwm.png" alt="hh" className="firstHH" />
-    <img src="https://i.imgur.com/Pi5fO5y.png" alt="hh2" className="firstHH2" />
+
+  return (
+
+    <>
+      <title>Hippy Horse Mint</title>
+      <link rel="icon" type="image/x-icon" href="/images/favicon.ico"></link>
+
+      {statusTxt ? <>
+
+        <div className="firework" ></div>
+        <div className="firework" ></div>
+        <div className="firework" ></div>
+
+      </> : ""}
+
+
+      {darkMode ? <>
+
+
+        <img src="https://i.imgur.com/BKdIJ1W.png" alt="hhdark" className="firstHH" />
+        <img src="https://i.imgur.com/vLZoxkh.png" alt="hh2dark" className="firstHH2" />
+
+      </> : <>
+
+
+        <img src="https://i.imgur.com/BKdIJ1W.png" alt="hh" className="firstHH" />
+        <img src="https://i.imgur.com/vLZoxkh.png" alt="hh2" className="firstHH2" />
+
+      </>}
+
+
       <div className="leftItem" ><CardanoWallet /></div>
       <div className="centered">
-        <h1>Hippy Horse Minting Page</h1>
+
+        <h1> <span className="rainbow rainbow_text_animated">Hippy Horse</span> Minting Page</h1>
         <br></br>  <br></br>
         {connected && (
           <>
 
+
             <div className="mintForm">
-            <br></br>
-            <div className="blink_me"> <span>LIVE&nbsp;</span> minted 2 / 4000 </div> 
+
               <br></br>
-            
+              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span> remain {4444 - parseInt(remainNft)} / 4444 </div>
+              <br></br>
+
             </div>
             <br></br>
             <div className="mintForm">
@@ -111,13 +178,31 @@ const Home: NextPage = () => {
               <button onClick={plus}> + </button>  &nbsp;&nbsp;
               <button onClick={minus}> - </button>
               <br></br> <br></br>
-              <button onClick={mint}>Mint Now</button>
-              <br></br>  <br></br>
+
+
+
+              {statusTxt ? <>
+
+
+                &nbsp;<button onClick={refreshPage} className="button glow-on-hover"><span>Mint Again </span></button>
+
+              </> : <button onClick={mint} className="button glow-on-hover"><span>Mint Now </span></button>}
+
+
+
+              <br></br>
+              &nbsp;&nbsp;
+              <div>
+
+                {statusMsg ? <b className="completedMsg">{erroeMsg} <a target="_blank" href={linkCardanoScan}>{tempTextHere}  </a> </b> : <b className="errorMsg">{erroeMsg}</b>}
+              </div>
+              <br></br>
               &nbsp;&nbsp;
             </div>
 
           </>
         )}
+
       </div>
     </>
   );
