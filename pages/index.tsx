@@ -144,13 +144,13 @@ const Home: NextPage = () => {
 
 
         <img src="https://i.imgur.com/BKdIJ1W.png" alt="hhdark" className="firstHH" />
-        <img src="https://i.imgur.com/YbOz95Q.png" alt="hh2dark" className="firstHH2" />
+        <img src="https://i.imgur.com/vLZoxkh.png" alt="hh2dark" className="firstHH2" />
 
       </> : <>
 
 
         <img src="https://i.imgur.com/BKdIJ1W.png" alt="hh" className="firstHH" />
-        <img src="https://i.imgur.com/YbOz95Q.png" alt="hh2" className="firstHH2" />
+        <img src="https://i.imgur.com/vLZoxkh.png" alt="hh2" className="firstHH2" />
 
       </>}
 
