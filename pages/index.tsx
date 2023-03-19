@@ -26,10 +26,10 @@ const Home: NextPage = () => {
 
 
   useEffect(() => {
-    /*axios.get('https://admirable-basbousa-f20380.netlify.app').then(response => {
-      console.log(response.data['count'])
-      setremainNft(response.data['count']);
-    })*/
+    axios.get('https://node-api-vercel-teal-eta.vercel.app/getAssestByPolicyId').then(response => {
+      console.log(response.data.length)
+      setremainNft(response.data.length);
+    })
 
     console.log('i fire once');
   }, []);
@@ -179,7 +179,14 @@ const Home: NextPage = () => {
             <div className="mintForm">
 
               <br></br>
-              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span> remain {4444 - parseInt(remainNft)} / 4444 </div>
+              <div className="blink_me"> <span><b>LIVE NOW</b>&nbsp;</span>
+
+                <br></br>
+
+                <progress id="file" value={4444 - parseInt(remainNft)} max="4444"> {4444 - parseInt(remainNft)}% </progress>
+                <br></br>
+
+                {4444 - parseInt(remainNft)} / 4444 </div>
               <br></br>
 
             </div>
@@ -187,7 +194,7 @@ const Home: NextPage = () => {
             <div className="mintForm">
               <br></br>
               <p>{count * 10} ADA ({count} NFTs) </p>
-              <button onClick={plus}> + </button>  &nbsp;&nbsp;
+              <button onClick={plus}> <span>+</span> </button>  &nbsp;&nbsp;
               <button onClick={minus}> - </button>
               <br></br> <br></br>
 
