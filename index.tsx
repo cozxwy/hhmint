@@ -26,11 +26,11 @@ const Home: NextPage = () => {
 
 
   useEffect(() => {
-    axios.get('https://node-api-vercel-teal-eta.vercel.app/getAssestByPolicyId').then(response => {
-      //console.log(response.data['count'])
+    /*axios.get('https://node-api-vercel-teal-eta.vercel.app/getAssestByPolicyId').then(response => {
+      console.log(response.data['count'])
       setremainNft(response.data['count']);
     })
-
+*/
     console.log('i fire once');
   }, []);
 
