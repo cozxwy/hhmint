@@ -27,7 +27,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     axios.get('https://node-api-vercel-teal-eta.vercel.app/getAssestByPolicyId').then(response => {
-      console.log(response.data['count'])
+      //console.log(response.data['count'])
       setremainNft(response.data['count']);
     })
 
